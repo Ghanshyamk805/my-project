@@ -52,7 +52,7 @@ jobs:
       matrix:
         configuration: [Debug, Release] 
 
-    runs-on: windows-latest  # For a list of available runner types, refer to
+    runs-on: ubuntu-latest  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
@@ -60,6 +60,7 @@ jobs:
      # Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
      # Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
      # Wap_Project_Path: your-wap-project-path                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
+      IMAGE_NAME: gullu/my-project
 
     steps:
     - name: Checkout
@@ -114,13 +115,14 @@ jobs:
         name: MSIX Package
         path: ${{ env.Wap_Project_Directory }}\AppPackages
 
-    # Build and push Docker image
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        push: true
-        tags: gullu/my-project:latest
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+    
+    #    # Build and push Docker image using Docker CLI
+    - name: Build Docker Image
+      run: docker build . --file Dockerfile --tag $IMAGE_NAME:latest
+
+    - name: Push Docker Image to Docker Hub
+      run: |
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        docker push $IMAGE_NAME:latest
+
   
