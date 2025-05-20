@@ -43,7 +43,7 @@ jobs:
 
     #    # Build and push Docker image using Docker CLI
       - name: Build Docker Image
-        run: docker build . --file Dockerfile --tag gullu/my-project:latest
+        run: docker build . --file apiproject/Dockerfile --tag gullu/my-project:latest
 
       - name: Push Docker Image to Docker Hub
         run: |
