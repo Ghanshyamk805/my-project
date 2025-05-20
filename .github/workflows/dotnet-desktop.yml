@@ -22,23 +22,23 @@ jobs:
           dotnet-version: '9.0.x'  # Ensuring .NET 9.0 setup
 
       - name: Restore dependencies
-        run: dotnet restore Apiproject/Apiproject.csproj
+        run: dotnet restore apiproject/Apiproject.csproj
 
       - name: Build application
-        run: dotnet build Apiproject/Apiproject.csproj --configuration Release --no-restore
+        run: dotnet build apiproject/Apiproject.csproj --configuration Release --no-restore
 
       - name: Run unit tests (Optional)
         run: dotnet test --verbosity normal
         continue-on-error: true  # Prevent failure if tests aren't set up
 
       - name: Publish application
-        run: dotnet publish Apiproject/Apiproject.csproj --configuration Release --output Apiproject/bin/Release/net9.0
+        run: dotnet publish apiproject/Apiproject.csproj --configuration Release --output apiproject/bin/Release/net9.0
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: WebAPI-Build
-          path: Apiproject/bin/Release/net9.0
+          path: apiproject/bin/Release/net9.0
 
     #    # Build and push Docker image using Docker CLI
       - name: Build Docker Image
