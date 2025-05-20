@@ -116,7 +116,7 @@ jobs:
 
     # Build and push Docker image
     - name: Build and push Docker image
-      uses: docker/build-push-action@v4
+      uses: mr-smithers-excellent/build-push-action@v4
       with:
         image: gullu/my-project
         registry: docker.io
