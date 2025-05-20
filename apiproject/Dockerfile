@@ -1,19 +1,17 @@
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-WORKDIR /app
-EXPOSE 80
-
+# Use the .NET SDK image
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-WORKDIR /src
-COPY ["apiproject/Apiproject.csproj", "apiproject/"]
-RUN dotnet restore "apiproject/Apiproject.csproj"
-COPY . .
-WORKDIR "/src/apiproject"
-RUN dotnet build "Apiproject.csproj" -c Release -o /app/build
+WORKDIR /source
 
-FROM build AS publish
-RUN dotnet publish "Apiproject.csproj" -c Release -o /app/publish
+# Copy the .csproj and restore dependencies
+COPY apiproject/*.csproj .
+RUN dotnet restore
 
-FROM base AS final
+# Copy the entire project and build
+COPY apiproject/. .
+RUN dotnet publish -c Release -o /app
+
+# Use the runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app .
 ENTRYPOINT ["dotnet", "Apiproject.dll"]
