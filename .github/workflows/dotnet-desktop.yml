@@ -112,10 +112,9 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: MSIX Package
-        path: ${{ env.Wap_Project_Directory }}\AppPackages
+        name: API Build Outputs
+        path: Apiproject/bin/Release/net9.0
 
-    
     #    # Build and push Docker image using Docker CLI
     - name: Build Docker Image
       run: docker build . --file Dockerfile --tag $IMAGE_NAME:latest
